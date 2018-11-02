@@ -1,0 +1,24 @@
+Universe = vanilla
++SourceLab="connor"
+#  use a specific machine : 
+# Requirements = OpSys == "LINUX" && Arch == "x86_64"  && (Machine == "compute-1-7.local" || Machine == "compute-1-8.local")
+
+## JK  NEGOTIATOR_POST_JOB_RANK = isUndefined(RemoteOwner) * (KFlops - SlotID)
+# Requirements = OpSys == "LINUX" && Arch == "x86_64" && Machine != "mbcluster"
+
+Environment = HOME=/home/alempel1/
+notification 	= Complete
+notify_user 	= jk@jhu.edu
+Executable = modelRunScript.sh
+initialdir = /home/alempel1/modelRun/
+
+Log = exampleLog.txt
+
+Notification = Error
+
+Arguments = $$(Arch) modelFunction $(Process)
+Output = output/matlab.$(Process).out
+Error = err/matlab.$(Process).err
+Queue 200 
+
+
