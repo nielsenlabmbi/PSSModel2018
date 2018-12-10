@@ -7,8 +7,8 @@ disp('Loaded data');
 
 Steps = 10;
 
-MtNLLower = 0;
-MtNLUpper = 0.7;
+PSSNLLower = 0;
+PSSNLUpper = 0.7;
 
 C50Lower = 0.01;
 C50Upper = 1;
@@ -44,7 +44,7 @@ ID = mod(ID,10000);
 WidthIId = idivide(ID,Steps^3);
 ID = mod(ID,1000);
 
-MtNLId = idivide(ID,Steps^2);
+PSSNLId = idivide(ID,Steps^2);
 ID = mod(ID,100);
 
 NId = idivide(ID,Steps^1);
@@ -55,7 +55,7 @@ C50Id = ID;
 Inh = InhLower + double(InhId)*InhUpper/(Steps-1);
 Width = WidthLower + double(WidthId)*(WidthUpper-WidthLower)/(Steps-1);
 WidthI = WidthILower + double(WidthIId)*(WidthIUpper-WidthILower)/(Steps-1);
-MtNL = MtNLLower + double(MtNLId)*MtNLUpper/(Steps-1);
+PSSNL = PSSNLLower + double(PSSNLId)*PSSNLUpper/(Steps-1);
 
 % Get V1 Responses from premade LGN responses
 
@@ -71,51 +71,51 @@ for N = 1:16
     popV1Resp(:,:,N) = circshift(V1Resp,[N-1 N-1]);
 end
 
-% Set MT Weights
+% Set PSS Weights
 
-MTE = circ_vmpdf([0:1:15]*(2*pi/16),14*pi/16,2^Width);
-MTE = MTE./max(MTE);
+PSSE = circ_vmpdf([0:1:15]*(2*pi/16),14*pi/16,2^Width);
+PSSE = PSSE./max(PSSE);
 
-MTI = circshift(circ_vmpdf([0:1:15]*(2*pi/16),14*pi/16,2^WidthI),8);
-MTI = MTI./max(MTI);
+PSSI = circshift(circ_vmpdf([0:1:15]*(2*pi/16),14*pi/16,2^WidthI),8);
+PSSI = PSSI./max(PSSI);
 
-MTW = MTE - MTI*Inh;
+PSSW = PSSE - PSSI*Inh;
 
-% Get MT Resp
+% Get PSS Resp
 
-MtModel = zeros(16,16);
+PSSModel = zeros(16,16);
  
 for i = 1:16
-    MtModel = MtModel + popV1Resp(:,:,i).*MTW(i);
+    PSSModel = PSSModel + popV1Resp(:,:,i).*PSSW(i);
 end
 
-if max(MtModel(:))>0
-MtModel=MtModel./(max(MtModel(:)));
+if max(PSSModel(:))>0
+PSSModel=PSSModel./(max(PSSModel(:)));
 else
-MtModel = zeros(16,16);    
+PSSModel = zeros(16,16);    
 end
 
-MtModel = MtModel - MtNL;
-MtModel(MtModel<0)=0;
+PSSModel = PSSModel - PSSNL;
+PSSModel(PSSModel<0)=0;
 
 % Allign to max ori
 
 for ori = 1:16
-TCunit(ori) = MtModel(ori,ori);
+TCunit(ori) = PSSModel(ori,ori);
 end
 
 mx = find(TCunit == max(TCunit));
 
-MtModel = MtModel([mx:end 1:mx-1],[mx:end 1:mx-1]);
+PSSModel = PSSModel([mx:end 1:mx-1],[mx:end 1:mx-1]);
 
 % Take out repeted conditions and linearize
-MtModelU=[];
+PSSModelU=[];
 for Ori = 1:16
-MtModelU = [MtModelU MtModel(Ori,Ori:end)];
+PSSModelU = [PSSModelU PSSModel(Ori,Ori:end)];
 end
 
 % Normalize max response of model to 1
-MtModelU=MtModelU./max(MtModelU(:));
+PSSModelU=PSSModelU./max(PSSModelU(:));
 
 %Correlate data with the model
 
@@ -132,9 +132,9 @@ for Ori = 1:16
 DataU = [DataU D2(Ori,Ori:end)];
 end
 % Get corr
-SemiCorr(al) = corr(DataU(:),MtModelU(:));
+SemiCorr(al) = corr(DataU(:),PSSModelU(:));
 % Get sq error
-SemiError(al) = mean((DataU(:)-MtModelU(:)).^2);
+SemiError(al) = mean((DataU(:)-PSSModelU(:)).^2);
 end
 % Minimize sq error across alignment
 [Error(i) Allignment(i)] = min(SemiError);
