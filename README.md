@@ -52,10 +52,10 @@ Responses of each neuron to be modeled should be saved as a 16x16 matrix where e
 
 2 – Preparing V1 response files:
 To reduce the time needed to run the model fits, it is useful to pre compute V1 response files for all the instances corresponding to the contrast response non-linearity step. To do this follow this steps:
-A-	 file called “3DGrtStim.mat” needs to be created containing 3D matrices corresponding to luminance values of drifting grating stimuli moving in 16 different directions in a similar manner as the one saved under “Example3DGrtStim.mat”. 
-B-	Run “MakeV1RF.m” to generate the “V1RF.mat” file containing the two simple V1 receptive fields in quadrature.
-C-	Make a folder called V1RespFiles on the model folder and run “v1ResponsesFileMaker.m” for ID values 0 to 99 (100 instances of the contrast response function).
-D-	Move the V1RespFiles folder containing the V1 response files to the folder where “modelFunction.m” is so the function can find the files.
+A – file called “3DGrtStim.mat” needs to be created containing 3D matrices corresponding to luminance values of drifting grating stimuli moving in 16 different directions in a similar manner as the one saved under “Example3DGrtStim.mat”. 
+B – Run “MakeV1RF.m” to generate the “V1RF.mat” file containing the two simple V1 receptive fields in quadrature.
+C – Make a folder called V1RespFiles on the model folder and run “v1ResponsesFileMaker.m” for ID values 0 to 99 (100 instances of the contrast response function).
+D – Move the V1RespFiles folder containing the V1 response files to the folder where “modelFunction.m” is so the function can find the files.
 
 3 – Run model fits:
 Create a folder in the model directory called “CorrFiles”. Then run “modelFunction.m” for BigJobID value 0 to 199. This will run 1,000,000 instances of the model and save the correlation and error values in 200 files in the CorrFiles folder.
