@@ -13,3 +13,4 @@ end
 end
 V1=V1./max(V1(:));
 V12=V12./max(V12(:));
+save('V1RF','V1','V12');
