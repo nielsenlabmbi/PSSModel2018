@@ -1,4 +1,4 @@
-function modelFunction(BigJobID)
+function modelFunctionSh(BigJobID)
 
 disp('Inside modelFunction');
 load('modelData.mat')
@@ -131,6 +131,8 @@ DataU=[];
 for Ori = 1:16
 DataU = [DataU D2(Ori,Ori:end)];
 end
+% Shuffle!
+DataU(:) = DataU(randperm(length(DataU(:))));
 % Get corr
 SemiCorr(al) = corr(DataU(:),PSSModelU(:));
 % Get sq error
