@@ -1,6 +1,6 @@
 function V1ResponsesFileMaker(ID)
 load('V1RF.mat')
-load('3DGrtStim.mat')
+load('conv3DGrtStim.mat')
 disp(['Job ID: ' num2str(ID)])
 
 ID1 = int32(ID);
